@@ -57,7 +57,7 @@ function initThreeJS() {
     directionalLight.position.set(10, 10, 5);
     scene.add(directionalLight);
     
-    const pointLight = new THREE.PointLight(0x0080FF, 0.8, 100);
+    const pointLight = new THREE.PointLight(0x00A86B, 0.8, 100);
     pointLight.position.set(-10, 0, 10);
     scene.add(pointLight);
     
@@ -83,7 +83,7 @@ function initThreeJS() {
 function createPackagingBox() {
     const geometry = new THREE.BoxGeometry(3, 3, 3);
     const material = new THREE.MeshPhongMaterial({
-        color: 0x0080FF,
+        color: 0x00A86B,
         transparent: true,
         opacity: 0.8,
         wireframe: false
@@ -105,7 +105,7 @@ function createFloatingGears() {
     
     for (let i = 0; i < 5; i++) {
         const gearMaterial = new THREE.MeshPhongMaterial({
-            color: i % 2 === 0 ? 0x00FF99 : 0x0080FF,
+            color: i % 2 === 0 ? 0x00FF99 : 0x00A86B,
             transparent: true,
             opacity: 0.7
         });
@@ -184,6 +184,7 @@ function initNavigation() {
     const sections = document.querySelectorAll('.section');
     const sidebarToggle = document.getElementById('sidebarToggle');
     const sidebar = document.getElementById('sidebar');
+    const themeToggle = document.getElementById('themeToggle');
     
     // Navigation item clicks
     navItems.forEach(item => {
@@ -201,6 +202,9 @@ function initNavigation() {
     sidebarToggle.addEventListener('click', () => {
         sidebar.classList.toggle('collapsed');
     });
+    
+    // Theme toggle
+    initThemeToggle();
 }
 
 function showSection(sectionName) {
@@ -216,6 +220,93 @@ function showSection(sectionName) {
         
         // Load section-specific data
         loadSectionData(sectionName);
+    }
+}
+
+// Theme Toggle Functionality
+function initThemeToggle() {
+    const themeToggle = document.getElementById('themeToggle');
+    const body = document.body;
+    
+    // Load saved theme from localStorage
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    body.classList.add(savedTheme + '-theme');
+    updateThemeIcon(savedTheme);
+    
+    // Theme toggle click handler
+    themeToggle.addEventListener('click', () => {
+        const currentTheme = body.classList.contains('light-theme') ? 'light' : 'dark';
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        
+        // Remove current theme class and add new one
+        body.classList.remove(currentTheme + '-theme');
+        body.classList.add(newTheme + '-theme');
+        
+        // Update icon
+        updateThemeIcon(newTheme);
+        
+        // Save to localStorage
+        localStorage.setItem('theme', newTheme);
+        
+        // Update charts colors if they exist
+        updateChartColors(newTheme);
+    });
+}
+
+function updateThemeIcon(theme) {
+    const themeToggle = document.getElementById('themeToggle');
+    const icon = themeToggle.querySelector('i');
+    
+    if (theme === 'light') {
+        icon.className = 'fas fa-moon';
+    } else {
+        icon.className = 'fas fa-sun';
+    }
+}
+
+function updateChartColors(theme) {
+    if (revenueChart) {
+        const colors = theme === 'light' ? {
+            border: '#00A86B',
+            background: 'rgba(0, 168, 107, 0.1)',
+            grid: 'rgba(0, 168, 107, 0.1)',
+            text: '#2c3e50'
+        } : {
+            border: '#00FF99',
+            background: 'rgba(0, 255, 153, 0.1)',
+            grid: 'rgba(0, 255, 153, 0.1)',
+            text: '#ffffff'
+        };
+        
+        revenueChart.data.datasets[0].borderColor = colors.border;
+        revenueChart.data.datasets[0].backgroundColor = colors.background;
+        revenueChart.options.scales.y.grid.color = colors.grid;
+        revenueChart.options.scales.x.grid.color = colors.grid;
+        revenueChart.options.scales.y.ticks.color = colors.text;
+        revenueChart.options.scales.x.ticks.color = colors.text;
+        revenueChart.update();
+    }
+    
+    if (expenseChart) {
+        const colors = theme === 'light' ? {
+            border: '#00A86B',
+            background: 'rgba(0, 168, 107, 0.1)',
+            grid: 'rgba(0, 168, 107, 0.1)',
+            text: '#2c3e50'
+        } : {
+            border: '#00FF99',
+            background: 'rgba(0, 255, 153, 0.1)',
+            grid: 'rgba(0, 255, 153, 0.1)',
+            text: '#ffffff'
+        };
+        
+        expenseChart.data.datasets[0].borderColor = colors.border;
+        expenseChart.data.datasets[0].backgroundColor = colors.background;
+        expenseChart.options.scales.y.grid.color = colors.grid;
+        expenseChart.options.scales.x.grid.color = colors.grid;
+        expenseChart.options.scales.y.ticks.color = colors.text;
+        expenseChart.options.scales.x.ticks.color = colors.text;
+        expenseChart.update();
     }
 }
 
