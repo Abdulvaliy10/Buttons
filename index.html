@@ -25,6 +25,13 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <script>
+        // Check login status immediately
+        if (localStorage.getItem('isLoggedIn') !== 'true') {
+            window.location.href = 'login.html';
+        }
+    </script>
+    
     <!-- Loading Screen -->
     <div id="loading-screen">
         <div class="loading-content">

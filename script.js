@@ -3,8 +3,22 @@ let scene, camera, renderer, packageBox, gears = [];
 let revenueChart, expenseChart;
 let currentSection = 'dashboard';
 
+// Check login status
+function checkLoginStatus() {
+    if (localStorage.getItem('isLoggedIn') !== 'true') {
+        window.location.href = 'login.html';
+        return false;
+    }
+    return true;
+}
+
 // Initialize application
 document.addEventListener('DOMContentLoaded', function() {
+    // Check login status first
+    if (!checkLoginStatus()) {
+        return;
+    }
+    
     initLoadingScreen();
     initThreeJS();
     initNavigation();
@@ -12,6 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initAnimations();
     initData();
     initResponsive();
+    initLogout();
 });
 
 // Loading Screen
@@ -1078,3 +1093,30 @@ function addNewAlert() {
 
 // Start real-time updates
 setTimeout(simulateRealTimeUpdates, 5000);
+
+// Logout functionality
+function initLogout() {
+    // Add logout button to sidebar footer
+    const sidebarFooter = document.querySelector('.sidebar-footer');
+    if (sidebarFooter) {
+        const logoutBtn = document.createElement('button');
+        logoutBtn.className = 'logout-btn';
+        logoutBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i> Logout';
+        logoutBtn.addEventListener('click', logout);
+        
+        // Insert logout button before user info
+        const userInfo = sidebarFooter.querySelector('.user-info');
+        if (userInfo) {
+            sidebarFooter.insertBefore(logoutBtn, userInfo);
+        }
+    }
+}
+
+function logout() {
+    // Clear login state
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('username');
+    
+    // Redirect to login page
+    window.location.href = 'login.html';
+}
