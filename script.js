@@ -6,6 +6,7 @@ let currentSection = 'dashboard';
 // Initialize application
 document.addEventListener('DOMContentLoaded', function() {
     initLoadingScreen();
+    initThemeToggle();
     initThreeJS();
     initNavigation();
     initCharts();
@@ -35,6 +36,106 @@ function initLoadingScreen() {
             }, 500);
         }
     }, 200);
+}
+
+// Theme Toggle
+function initThemeToggle() {
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    const themeText = document.getElementById('themeText');
+    const body = document.body;
+    
+    // Check for saved theme preference or default to 'dark'
+    const currentTheme = localStorage.getItem('theme') || 'dark';
+    body.setAttribute('data-theme', currentTheme);
+    updateThemeUI(currentTheme);
+    
+    themeToggle.addEventListener('click', () => {
+        const currentTheme = body.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        
+        // Add transition class for smooth theme change
+        body.classList.add('theme-transition');
+        
+        // Update theme
+        body.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        updateThemeUI(newTheme);
+        
+        // Update 3D scene colors if needed
+        updateThreeJSTheme(newTheme);
+        
+        // Update charts with new theme colors
+        updateChartsTheme(newTheme);
+        
+        // Remove transition class after animation
+        setTimeout(() => {
+            body.classList.remove('theme-transition');
+        }, 300);
+    });
+    
+    function updateThemeUI(theme) {
+        if (theme === 'dark') {
+            themeIcon.className = 'fas fa-sun';
+            themeText.textContent = 'Light Mode';
+        } else {
+            themeIcon.className = 'fas fa-moon';
+            themeText.textContent = 'Dark Mode';
+        }
+    }
+}
+
+function updateThreeJSTheme(theme) {
+    if (!scene) return;
+    
+    // Update lighting based on theme
+    const lights = scene.children.filter(child => child.isLight);
+    
+    if (theme === 'light') {
+        // Increase ambient light for light theme
+        const ambientLight = lights.find(light => light.type === 'AmbientLight');
+        if (ambientLight) ambientLight.intensity = 0.8;
+        
+        // Adjust directional light
+        const directionalLight = lights.find(light => light.type === 'DirectionalLight');
+        if (directionalLight) directionalLight.intensity = 0.6;
+        
+        // Update package box material
+        if (packageBox) {
+            packageBox.material.opacity = 0.6;
+        }
+    } else {
+        // Restore dark theme lighting
+        const ambientLight = lights.find(light => light.type === 'AmbientLight');
+        if (ambientLight) ambientLight.intensity = 0.4;
+        
+        const directionalLight = lights.find(light => light.type === 'DirectionalLight');
+        if (directionalLight) directionalLight.intensity = 1;
+        
+        if (packageBox) {
+            packageBox.material.opacity = 0.8;
+        }
+    }
+}
+
+function updateChartsTheme(theme) {
+    const textColor = theme === 'light' ? '#475569' : '#E0E0E0';
+    const gridColor = theme === 'light' ? 'rgba(71, 85, 105, 0.1)' : 'rgba(0, 128, 255, 0.1)';
+    
+    // Update revenue chart
+    if (revenueChart) {
+        revenueChart.options.scales.y.ticks.color = textColor;
+        revenueChart.options.scales.x.ticks.color = textColor;
+        revenueChart.options.scales.y.grid.color = gridColor;
+        revenueChart.options.scales.x.grid.color = gridColor;
+        revenueChart.update('none');
+    }
+    
+    // Update expense chart
+    if (expenseChart) {
+        expenseChart.options.plugins.legend.labels.color = textColor;
+        expenseChart.update('none');
+    }
 }
 
 // Three.js 3D Background
