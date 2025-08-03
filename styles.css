@@ -212,12 +212,14 @@ body.dark-theme {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    position: relative;
 }
 
-.header-controls {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
+.theme-toggle-container {
+    position: absolute;
+    top: var(--spacing-sm);
+    right: var(--spacing-sm);
+    z-index: 10;
 }
 
 .theme-toggle {
@@ -254,6 +256,9 @@ body.dark-theme {
     display: flex;
     align-items: center;
     gap: var(--spacing-sm);
+    flex: 1;
+    min-width: 0;
+    padding-right: var(--spacing-md);
 }
 
 .logo i {
@@ -264,18 +269,22 @@ body.dark-theme {
 
 .logo-text {
     font-family: var(--font-display);
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: 700;
     background: var(--gradient-primary);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 180px;
 }
 
 .sidebar-toggle {
     background: none;
     border: none;
-    color: var(--light-gray);
+    color: var(--text-secondary);
     font-size: 1.2rem;
     cursor: pointer;
     padding: var(--spacing-xs);
@@ -284,8 +293,8 @@ body.dark-theme {
 }
 
 .sidebar-toggle:hover {
-    background: rgba(0, 128, 255, 0.1);
-    color: var(--primary-blue);
+    background: rgba(0, 168, 107, 0.1);
+    color: var(--primary-green);
 }
 
 .nav-menu {
@@ -305,14 +314,14 @@ body.dark-theme {
 }
 
 .nav-item:hover {
-    background: rgba(0, 128, 255, 0.1);
-    border-left-color: var(--primary-blue);
+    background: rgba(0, 168, 107, 0.1);
+    border-left-color: var(--primary-green);
 }
 
 .nav-item.active {
     background: rgba(0, 255, 153, 0.1);
-    border-left-color: var(--neon-green);
-    color: var(--neon-green);
+    border-left-color: var(--primary-green);
+    color: var(--primary-green);
 }
 
 .nav-item i {
@@ -321,8 +330,8 @@ body.dark-theme {
 }
 
 .notification-badge {
-    background: var(--neon-green);
-    color: var(--jet-black);
+    background: var(--primary-green);
+    color: var(--background);
     font-size: 0.7rem;
     padding: 2px 6px;
     border-radius: 10px;
@@ -336,7 +345,7 @@ body.dark-theme {
     left: 0;
     right: 0;
     padding: var(--spacing-lg);
-    border-top: 1px solid rgba(0, 128, 255, 0.1);
+    border-top: 1px solid var(--border);
 }
 
 .user-info {
@@ -362,12 +371,12 @@ body.dark-theme {
 
 .user-name {
     font-weight: 600;
-    color: var(--white);
+    color: var(--text-primary);
 }
 
 .user-role {
     font-size: 0.8rem;
-    color: var(--light-gray);
+    color: var(--text-secondary);
     opacity: 0.7;
 }
 
@@ -1384,6 +1393,16 @@ select:focus {
     
     .footer {
         margin-left: 0;
+    }
+    
+    .theme-toggle-container {
+        top: var(--spacing-xs);
+        right: var(--spacing-xs);
+    }
+    
+    .logo-text {
+        max-width: 140px;
+        font-size: 0.9rem;
     }
     
     .title-main {
