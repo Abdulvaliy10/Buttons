@@ -7,8 +7,9 @@
 
 :root {
     /* Color Palette - Dark Theme */
-    --primary-blue: #0080FF;
-    --neon-green: #00FF99;
+    --primary-blue: #00ADEF;
+    --silver: #C0C0C0;
+    --charcoal: #333333;
     --jet-black: #121212;
     --dark-gray: #1a1a1a;
     --medium-gray: #2a2a2a;
@@ -20,18 +21,18 @@
     --bg-secondary: var(--dark-gray);
     --bg-tertiary: var(--medium-gray);
     --text-primary: var(--white);
-    --text-secondary: var(--light-gray);
-    --text-muted: rgba(224, 224, 224, 0.7);
+    --text-secondary: var(--silver);
+    --text-muted: rgba(192, 192, 192, 0.7);
     
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, var(--primary-blue), var(--neon-green));
+    --gradient-primary: linear-gradient(135deg, var(--primary-blue), var(--silver));
     --gradient-dark: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
     --gradient-card: linear-gradient(145deg, var(--bg-secondary), var(--bg-tertiary));
     
     /* Shadows */
-    --shadow-card: 0 10px 30px rgba(0, 128, 255, 0.1);
-    --shadow-hover: 0 15px 40px rgba(0, 255, 153, 0.2);
-    --shadow-neon: 0 0 20px rgba(0, 255, 153, 0.3);
+    --shadow-card: 0 10px 30px rgba(0, 173, 239, 0.1);
+    --shadow-hover: 0 15px 40px rgba(0, 173, 239, 0.2);
+    --shadow-neon: 0 0 20px rgba(0, 173, 239, 0.3);
     
     /* Typography */
     --font-primary: 'Inter', sans-serif;
@@ -56,9 +57,9 @@
     --bg-primary: #f8fafc;
     --bg-secondary: #ffffff;
     --bg-tertiary: #f1f5f9;
-    --text-primary: #1e293b;
+    --text-primary: var(--charcoal);
     --text-secondary: #475569;
-    --text-muted: rgba(71, 85, 105, 0.7);
+    --text-muted: rgba(51, 51, 51, 0.7);
     
     /* Light Theme Gradients */
     --gradient-dark: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
@@ -67,7 +68,7 @@
     /* Light Theme Shadows */
     --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.08);
     --shadow-hover: 0 15px 40px rgba(0, 0, 0, 0.12);
-    --shadow-neon: 0 0 20px rgba(0, 128, 255, 0.2);
+    --shadow-neon: 0 0 20px rgba(0, 173, 239, 0.2);
 }
 
 /* Light theme specific overrides */
@@ -76,20 +77,20 @@
 }
 
 [data-theme="light"] .nav-item:hover {
-    background: rgba(0, 128, 255, 0.08);
+    background: rgba(0, 173, 239, 0.08);
 }
 
 [data-theme="light"] .nav-item.active {
-    background: rgba(0, 255, 153, 0.08);
+    background: rgba(192, 192, 192, 0.15);
 }
 
 [data-theme="light"] .sidebar-header,
 [data-theme="light"] .sidebar-footer {
-    border-color: rgba(0, 128, 255, 0.2);
+    border-color: rgba(0, 173, 239, 0.2);
 }
 
 [data-theme="light"] .section-header {
-    border-bottom-color: rgba(0, 128, 255, 0.2);
+    border-bottom-color: rgba(0, 173, 239, 0.2);
 }
 
 [data-theme="light"] .kpi-card,
@@ -98,7 +99,7 @@
 [data-theme="light"] .employee-card,
 [data-theme="light"] .inventory-item,
 [data-theme="light"] .alert-item {
-    border: 1px solid rgba(0, 128, 255, 0.15);
+    border: 1px solid rgba(0, 173, 239, 0.15);
 }
 
 [data-theme="light"] .calendar-day {
@@ -108,7 +109,7 @@
 
 [data-theme="light"] .payment-item {
     background: var(--bg-secondary);
-    border: 1px solid rgba(0, 128, 255, 0.15);
+    border: 1px solid rgba(0, 173, 239, 0.15);
 }
 
 /* Top Controls */
@@ -151,6 +152,16 @@
 .logout-text {
     font-size: 0.9rem;
     font-weight: 500;
+    opacity: 0;
+    width: 0;
+    overflow: hidden;
+    transition: all var(--transition-medium);
+}
+
+.logout-btn:hover .logout-text {
+    opacity: 1;
+    width: auto;
+    margin-left: var(--spacing-xs);
 }
 
 /* Theme Toggle */
@@ -189,6 +200,16 @@
     font-size: 0.9rem;
     font-weight: 500;
     color: var(--text-secondary);
+    opacity: 0;
+    width: 0;
+    overflow: hidden;
+    transition: all var(--transition-medium);
+}
+
+.theme-toggle:hover .theme-text {
+    opacity: 1;
+    width: auto;
+    margin-left: var(--spacing-xs);
 }
 
 body {
@@ -250,7 +271,7 @@ body {
     position: relative;
     z-index: 2;
     width: 100%;
-    max-width: 450px;
+    max-width: 600px;
     padding: var(--spacing-lg);
 }
 
@@ -597,7 +618,7 @@ body {
 }
 
 .demo-btn i {
-    color: var(--neon-green);
+    color: var(--primary-blue);
 }
 
 /* Login Footer */
@@ -1005,8 +1026,8 @@ body {
     font-family: var(--font-display);
     font-size: 3rem;
     font-weight: 700;
-    color: var(--neon-green);
-    text-shadow: 0 0 20px rgba(0, 255, 153, 0.5);
+    color: var(--primary-blue);
+    text-shadow: 0 0 20px rgba(0, 173, 239, 0.5);
 }
 
 .stat-label {
@@ -1044,11 +1065,11 @@ body {
 
 /* Buttons */
 .btn {
-    padding: var(--spacing-sm) var(--spacing-lg);
+    padding: var(--spacing-xs) var(--spacing-md);
     border: none;
-    border-radius: 8px;
+    border-radius: 6px;
     font-family: var(--font-primary);
-    font-weight: 600;
+    font-weight: 500;
     cursor: pointer;
     transition: var(--transition-fast);
     display: inline-flex;
@@ -1057,6 +1078,7 @@ body {
     text-decoration: none;
     position: relative;
     overflow: hidden;
+    font-size: 0.9rem;
 }
 
 .btn::before {
@@ -1112,13 +1134,13 @@ body {
 
 .kpi-card {
     background: var(--gradient-card);
-    padding: var(--spacing-lg);
-    border-radius: 15px;
-    border: 1px solid rgba(0, 128, 255, 0.1);
+    padding: var(--spacing-md);
+    border-radius: 12px;
+    border: 1px solid rgba(0, 173, 239, 0.1);
     box-shadow: var(--shadow-card);
     display: flex;
     align-items: center;
-    gap: var(--spacing-md);
+    gap: var(--spacing-sm);
     transition: var(--transition-medium);
     position: relative;
     overflow: hidden;
@@ -1140,22 +1162,22 @@ body {
 }
 
 .kpi-icon {
-    width: 60px;
-    height: 60px;
-    border-radius: 12px;
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     color: var(--white);
 }
 
 .kpi-card.income .kpi-icon {
-    background: linear-gradient(135deg, #00FF99, #00CC7A);
+    background: linear-gradient(135deg, #00ADEF, #C0C0C0);
 }
 
 .kpi-card.profit .kpi-icon {
-    background: linear-gradient(135deg, #0080FF, #0066CC);
+    background: linear-gradient(135deg, #00ADEF, #333333);
 }
 
 .kpi-card.expenses .kpi-icon {
@@ -1163,7 +1185,7 @@ body {
 }
 
 .kpi-card.orders .kpi-icon {
-    background: linear-gradient(135deg, #FFB74D, #FF9800);
+    background: linear-gradient(135deg, #C0C0C0, #333333);
 }
 
 .kpi-content {
@@ -1172,10 +1194,10 @@ body {
 
 .kpi-value {
     font-family: var(--font-display);
-    font-size: 2rem;
+    font-size: 1.6rem;
     font-weight: 700;
     color: var(--text-primary);
-    text-shadow: 0 0 10px rgba(0, 255, 153, 0.3);
+    text-shadow: 0 0 10px rgba(0, 173, 239, 0.3);
 }
 
 .kpi-label {
@@ -1193,8 +1215,8 @@ body {
 }
 
 .kpi-change.positive {
-    background: rgba(0, 255, 153, 0.2);
-    color: var(--neon-green);
+    background: rgba(0, 173, 239, 0.2);
+    color: var(--primary-blue);
 }
 
 .kpi-change.negative {
@@ -1206,13 +1228,15 @@ body {
 .chart-container {
     background: var(--gradient-card);
     border-radius: 15px;
-    border: 1px solid rgba(0, 128, 255, 0.1);
+    border: 1px solid rgba(0, 173, 239, 0.1);
     box-shadow: var(--shadow-card);
     overflow: hidden;
+    max-height: 350px;
 }
 
 .chart-card {
-    padding: var(--spacing-lg);
+    padding: var(--spacing-md);
+    height: 300px;
 }
 
 .chart-card h3 {

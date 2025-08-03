@@ -381,11 +381,11 @@ function initLoginThreeJS() {
     const ambientLight = new THREE.AmbientLight(0x404040, 0.3);
     loginScene.add(ambientLight);
     
-    const directionalLight = new THREE.DirectionalLight(0x00FF99, 0.8);
+    const directionalLight = new THREE.DirectionalLight(0x00ADEF, 0.8);
     directionalLight.position.set(5, 5, 5);
     loginScene.add(directionalLight);
     
-    const pointLight = new THREE.PointLight(0x0080FF, 0.6, 50);
+    const pointLight = new THREE.PointLight(0xC0C0C0, 0.6, 50);
     pointLight.position.set(-5, 0, 5);
     loginScene.add(pointLight);
     
@@ -429,7 +429,7 @@ function createLoginGeometry() {
         }
         
         material = new THREE.MeshPhongMaterial({
-            color: i % 2 === 0 ? 0x0080FF : 0x00FF99,
+            color: i % 2 === 0 ? 0x00ADEF : 0xC0C0C0,
             transparent: true,
             opacity: 0.6,
             wireframe: Math.random() > 0.5
@@ -456,7 +456,7 @@ function createLoginGeometry() {
 
 function createLoginParticles() {
     const particlesGeometry = new THREE.BufferGeometry();
-    const particlesCount = 150;
+    const particlesCount = 80;
     const posArray = new Float32Array(particlesCount * 3);
     
     for (let i = 0; i < particlesCount * 3; i++) {
@@ -467,9 +467,9 @@ function createLoginParticles() {
     
     const particlesMaterial = new THREE.PointsMaterial({
         size: 0.03,
-        color: 0x00FF99,
+        color: 0x00ADEF,
         transparent: true,
-        opacity: 0.6
+        opacity: 0.5
     });
     
     const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
@@ -547,11 +547,11 @@ function initThreeJS() {
     const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
     scene.add(ambientLight);
     
-    const directionalLight = new THREE.DirectionalLight(0x00FF99, 1);
+    const directionalLight = new THREE.DirectionalLight(0x00ADEF, 1);
     directionalLight.position.set(10, 10, 5);
     scene.add(directionalLight);
     
-    const pointLight = new THREE.PointLight(0x0080FF, 0.8, 100);
+    const pointLight = new THREE.PointLight(0xC0C0C0, 0.8, 100);
     pointLight.position.set(-10, 0, 10);
     scene.add(pointLight);
     
@@ -589,7 +589,7 @@ function createPackagingBox() {
     
     // Add edges for better visibility
     const edges = new THREE.EdgesGeometry(geometry);
-    const lineMaterial = new THREE.LineBasicMaterial({ color: 0x00FF99, linewidth: 2 });
+    const lineMaterial = new THREE.LineBasicMaterial({ color: 0x00ADEF, linewidth: 2 });
     const wireframe = new THREE.LineSegments(edges, lineMaterial);
     packageBox.add(wireframe);
 }
@@ -599,7 +599,7 @@ function createFloatingGears() {
     
     for (let i = 0; i < 5; i++) {
         const gearMaterial = new THREE.MeshPhongMaterial({
-            color: i % 2 === 0 ? 0x00FF99 : 0x0080FF,
+            color: i % 2 === 0 ? 0x00ADEF : 0xC0C0C0,
             transparent: true,
             opacity: 0.7
         });
@@ -620,7 +620,7 @@ function createFloatingGears() {
 
 function createParticles() {
     const particlesGeometry = new THREE.BufferGeometry();
-    const particlesCount = 100;
+    const particlesCount = 50;
     const posArray = new Float32Array(particlesCount * 3);
     
     for (let i = 0; i < particlesCount * 3; i++) {
@@ -631,9 +631,9 @@ function createParticles() {
     
     const particlesMaterial = new THREE.PointsMaterial({
         size: 0.05,
-        color: 0x00FF99,
+        color: 0x00ADEF,
         transparent: true,
-        opacity: 0.8
+        opacity: 0.6
     });
     
     const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
@@ -682,13 +682,14 @@ function initNavigation() {
     
     // Navigation item clicks
     navItems.forEach(item => {
-        item.addEventListener('click', () => {
-            const sectionName = item.dataset.section;
-            showSection(sectionName);
+        item.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
             
-            // Update active nav item
-            navItems.forEach(nav => nav.classList.remove('active'));
-            item.classList.add('active');
+            const sectionName = item.dataset.section;
+            if (sectionName) {
+                showSection(sectionName);
+            }
         });
     });
     
@@ -705,17 +706,31 @@ function initNavigation() {
 
 function showSection(sectionName) {
     const sections = document.querySelectorAll('.section');
+    const navItems = document.querySelectorAll('.nav-item');
+    
+    // Remove active class from all sections and nav items
     sections.forEach(section => {
         section.classList.remove('active');
     });
     
+    navItems.forEach(nav => {
+        nav.classList.remove('active');
+    });
+    
+    // Add active class to target section and nav item
     const targetSection = document.getElementById(sectionName);
+    const targetNavItem = document.querySelector(`[data-section="${sectionName}"]`);
+    
     if (targetSection) {
         targetSection.classList.add('active');
         currentSection = sectionName;
         
         // Load section-specific data
         loadSectionData(sectionName);
+    }
+    
+    if (targetNavItem) {
+        targetNavItem.classList.add('active');
     }
 }
 
@@ -730,8 +745,8 @@ function initRevenueChart() {
     if (!ctx) return;
     
     const gradient = ctx.getContext('2d').createLinearGradient(0, 0, 0, 400);
-    gradient.addColorStop(0, 'rgba(0, 255, 153, 0.8)');
-    gradient.addColorStop(1, 'rgba(0, 128, 255, 0.1)');
+    gradient.addColorStop(0, 'rgba(0, 173, 239, 0.8)');
+    gradient.addColorStop(1, 'rgba(0, 173, 239, 0.1)');
     
     revenueChart = new Chart(ctx, {
         type: 'line',
@@ -741,11 +756,11 @@ function initRevenueChart() {
                 label: 'Revenue',
                 data: [85000, 92000, 88000, 95000, 110000, 125000],
                 backgroundColor: gradient,
-                borderColor: '#00FF99',
+                borderColor: '#00ADEF',
                 borderWidth: 3,
                 fill: true,
                 tension: 0.4,
-                pointBackgroundColor: '#00FF99',
+                pointBackgroundColor: '#00ADEF',
                 pointBorderColor: '#121212',
                 pointBorderWidth: 2,
                 pointRadius: 6
@@ -763,7 +778,7 @@ function initRevenueChart() {
                 y: {
                     beginAtZero: true,
                     grid: {
-                        color: 'rgba(0, 128, 255, 0.1)'
+                        color: 'rgba(0, 173, 239, 0.1)'
                     },
                     ticks: {
                         color: '#E0E0E0',
@@ -774,7 +789,7 @@ function initRevenueChart() {
                 },
                 x: {
                     grid: {
-                        color: 'rgba(0, 128, 255, 0.1)'
+                        color: 'rgba(0, 173, 239, 0.1)'
                     },
                     ticks: {
                         color: '#E0E0E0'
@@ -800,11 +815,11 @@ function initExpenseChart() {
             datasets: [{
                 data: [45, 25, 15, 10, 5],
                 backgroundColor: [
-                    '#0080FF',
-                    '#00FF99',
+                    '#00ADEF',
+                    '#C0C0C0',
                     '#FFB74D',
                     '#FF6B6B',
-                    '#9C27B0'
+                    '#333333'
                 ],
                 borderWidth: 0,
                 hoverBorderWidth: 3,
