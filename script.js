@@ -26,6 +26,219 @@ document.addEventListener('DOMContentLoaded', function() {
     initLoginThreeJS();
 });
 
+// Login System
+function initLoginSystem() {
+    const loginForm = document.getElementById('loginForm');
+    const loginBtn = document.getElementById('loginBtn');
+    const demoBtn = document.getElementById('demoBtn');
+    const forgotPassword = document.getElementById('forgotPassword');
+    const resetPassword = document.getElementById('resetPassword');
+    const passwordToggle = document.getElementById('passwordToggle');
+    const passwordInput = document.getElementById('password');
+    
+    // Initialize login theme toggle
+    initLoginThemeToggle();
+    
+    // Login form submission
+    loginForm.addEventListener('submit', handleLogin);
+    
+    // Demo button
+    demoBtn.addEventListener('click', () => {
+        document.getElementById('username').value = VALID_CREDENTIALS.username;
+        document.getElementById('password').value = VALID_CREDENTIALS.password;
+        showToast('Demo credentials filled!', 'success');
+    });
+    
+    // Password toggle
+    passwordToggle.addEventListener('click', () => {
+        const isPassword = passwordInput.type === 'password';
+        passwordInput.type = isPassword ? 'text' : 'password';
+        passwordToggle.querySelector('i').className = isPassword ? 'fas fa-eye-slash' : 'fas fa-eye';
+    });
+    
+    // Forgot password
+    forgotPassword.addEventListener('click', () => {
+        showToast('Please contact system administrator for password reset.', 'info');
+    });
+    
+    // Reset password
+    resetPassword.addEventListener('click', () => {
+        showToast('Password reset feature coming soon!', 'info');
+    });
+    
+    // Input animations
+    const inputs = document.querySelectorAll('.form-input');
+    inputs.forEach(input => {
+        input.addEventListener('focus', () => {
+            input.parentElement.classList.add('focused');
+        });
+        
+        input.addEventListener('blur', () => {
+            if (!input.value) {
+                input.parentElement.classList.remove('focused');
+            }
+        });
+    });
+}
+
+function initLoginThemeToggle() {
+    const loginThemeToggle = document.getElementById('loginThemeToggle');
+    const loginThemeIcon = document.getElementById('loginThemeIcon');
+    const body = document.body;
+    
+    if (!loginThemeToggle) return;
+    
+    const currentTheme = localStorage.getItem('theme') || 'dark';
+    updateLoginThemeUI(currentTheme);
+    
+    loginThemeToggle.addEventListener('click', () => {
+        const currentTheme = body.getAttribute('data-theme') || 'dark';
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        
+        body.classList.add('theme-transition');
+        body.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        updateLoginThemeUI(newTheme);
+        
+        // Update login 3D scene
+        updateLoginThreeJSTheme(newTheme);
+        
+        setTimeout(() => {
+            body.classList.remove('theme-transition');
+        }, 300);
+    });
+    
+    function updateLoginThemeUI(theme) {
+        if (theme === 'dark') {
+            loginThemeIcon.className = 'fas fa-sun';
+        } else {
+            loginThemeIcon.className = 'fas fa-moon';
+        }
+    }
+}
+
+async function handleLogin(e) {
+    e.preventDefault();
+    
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value;
+    const loginBtn = document.getElementById('loginBtn');
+    const btnText = loginBtn.querySelector('.btn-text');
+    const btnLoader = loginBtn.querySelector('.btn-loader');
+    const rememberMe = document.getElementById('rememberMe').checked;
+    
+    // Show loading state
+    btnText.style.display = 'none';
+    btnLoader.style.display = 'flex';
+    loginBtn.disabled = true;
+    
+    // Simulate network delay
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    // Validate credentials
+    if (username === VALID_CREDENTIALS.username && password === VALID_CREDENTIALS.password) {
+        // Success
+        showToast('Login successful! Welcome back.', 'success');
+        
+        // Save login state
+        if (rememberMe) {
+            localStorage.setItem('isLoggedIn', 'true');
+        }
+        
+        // Transition to main app
+        setTimeout(() => {
+            showMainApp();
+        }, 1000);
+        
+    } else {
+        // Error
+        showToast('Invalid username or password. Please try again.', 'error');
+        
+        // Reset form state
+        btnText.style.display = 'block';
+        btnLoader.style.display = 'none';
+        loginBtn.disabled = false;
+        
+        // Shake animation for error feedback
+        const loginCard = document.querySelector('.login-card');
+        loginCard.style.animation = 'shake 0.5s ease-in-out';
+        setTimeout(() => {
+            loginCard.style.animation = '';
+        }, 500);
+    }
+}
+
+function showLoginScreen() {
+    const loginScreen = document.getElementById('login-screen');
+    const appContainer = document.getElementById('app');
+    
+    loginScreen.classList.remove('hidden');
+    appContainer.classList.add('hidden');
+    
+    // Initialize login 3D background
+    setTimeout(() => {
+        if (!loginRenderer) {
+            initLoginThreeJS();
+        }
+    }, 100);
+}
+
+function showMainApp() {
+    const loginScreen = document.getElementById('login-screen');
+    const appContainer = document.getElementById('app');
+    const loadingScreen = document.getElementById('loading-screen');
+    
+    // Hide login screen
+    loginScreen.classList.add('hidden');
+    
+    // Show loading screen
+    loadingScreen.classList.remove('hidden');
+    
+    // Initialize main app systems
+    setTimeout(() => {
+        initThreeJS();
+        initNavigation();
+        initCharts();
+        initAnimations();
+        initData();
+        initResponsive();
+        
+        // Start loading simulation
+        initLoadingScreen();
+    }, 500);
+    
+    isLoggedIn = true;
+}
+
+function logout() {
+    localStorage.removeItem('isLoggedIn');
+    isLoggedIn = false;
+    
+    // Clear form
+    document.getElementById('username').value = '';
+    document.getElementById('password').value = '';
+    document.getElementById('rememberMe').checked = false;
+    
+    // Show login screen
+    showLoginScreen();
+    showToast('You have been logged out successfully.', 'info');
+}
+
+function showToast(message, type = 'info') {
+    const isError = type === 'error';
+    const isSuccess = type === 'success';
+    
+    const toast = document.getElementById(isError ? 'errorToast' : 'successToast');
+    const messageElement = toast.querySelector(isError ? '.error-message' : '.success-message');
+    
+    messageElement.textContent = message;
+    toast.classList.add('show');
+    
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 4000);
+}
+
 // Loading Screen
 function initLoadingScreen() {
     const loadingScreen = document.getElementById('loading-screen');
@@ -40,10 +253,11 @@ function initLoadingScreen() {
             clearInterval(loadInterval);
             setTimeout(() => {
                 loadingScreen.classList.add('hidden');
+                const appContainer = document.getElementById('app');
+                appContainer.classList.remove('hidden');
                 setTimeout(() => {
-                    loadingScreen.style.display = 'none';
                     startAnimations();
-                }, 500);
+                }, 100);
             }, 500);
         }
     }, 200);
@@ -147,6 +361,174 @@ function updateChartsTheme(theme) {
         expenseChart.options.plugins.legend.labels.color = textColor;
         expenseChart.update('none');
     }
+}
+
+// Login Three.js Background
+function initLoginThreeJS() {
+    const canvas = document.getElementById('login-canvas');
+    if (!canvas) return;
+    
+    const container = canvas.parentElement;
+    
+    // Scene setup
+    loginScene = new THREE.Scene();
+    loginCamera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+    loginRenderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+    loginRenderer.setSize(container.clientWidth, container.clientHeight);
+    loginRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    
+    // Lighting
+    const ambientLight = new THREE.AmbientLight(0x404040, 0.3);
+    loginScene.add(ambientLight);
+    
+    const directionalLight = new THREE.DirectionalLight(0x00FF99, 0.8);
+    directionalLight.position.set(5, 5, 5);
+    loginScene.add(directionalLight);
+    
+    const pointLight = new THREE.PointLight(0x0080FF, 0.6, 50);
+    pointLight.position.set(-5, 0, 5);
+    loginScene.add(pointLight);
+    
+    // Create floating geometric shapes
+    createLoginGeometry();
+    
+    // Create particle field
+    createLoginParticles();
+    
+    loginCamera.position.z = 20;
+    loginCamera.position.y = 0;
+    
+    // Animation loop
+    animateLogin();
+    
+    // Resize handler
+    window.addEventListener('resize', onLoginWindowResize);
+}
+
+function createLoginGeometry() {
+    const shapes = [];
+    
+    // Create various geometric shapes
+    for (let i = 0; i < 8; i++) {
+        let geometry, material;
+        
+        const shapeType = i % 4;
+        switch(shapeType) {
+            case 0: // Box
+                geometry = new THREE.BoxGeometry(1, 1, 1);
+                break;
+            case 1: // Sphere
+                geometry = new THREE.SphereGeometry(0.5, 16, 16);
+                break;
+            case 2: // Cylinder
+                geometry = new THREE.CylinderGeometry(0.3, 0.3, 1, 8);
+                break;
+            case 3: // Octahedron
+                geometry = new THREE.OctahedronGeometry(0.7);
+                break;
+        }
+        
+        material = new THREE.MeshPhongMaterial({
+            color: i % 2 === 0 ? 0x0080FF : 0x00FF99,
+            transparent: true,
+            opacity: 0.6,
+            wireframe: Math.random() > 0.5
+        });
+        
+        const shape = new THREE.Mesh(geometry, material);
+        shape.position.set(
+            (Math.random() - 0.5) * 30,
+            (Math.random() - 0.5) * 20,
+            (Math.random() - 0.5) * 20
+        );
+        shape.rotation.set(
+            Math.random() * Math.PI,
+            Math.random() * Math.PI,
+            Math.random() * Math.PI
+        );
+        
+        shapes.push(shape);
+        loginScene.add(shape);
+    }
+    
+    return shapes;
+}
+
+function createLoginParticles() {
+    const particlesGeometry = new THREE.BufferGeometry();
+    const particlesCount = 150;
+    const posArray = new Float32Array(particlesCount * 3);
+    
+    for (let i = 0; i < particlesCount * 3; i++) {
+        posArray[i] = (Math.random() - 0.5) * 60;
+    }
+    
+    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+    
+    const particlesMaterial = new THREE.PointsMaterial({
+        size: 0.03,
+        color: 0x00FF99,
+        transparent: true,
+        opacity: 0.6
+    });
+    
+    const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+    loginScene.add(particlesMesh);
+    
+    return particlesMesh;
+}
+
+function animateLogin() {
+    if (!loginRenderer || !loginScene) return;
+    
+    requestAnimationFrame(animateLogin);
+    
+    const time = Date.now() * 0.001;
+    
+    // Animate geometric shapes
+    loginScene.children.forEach((child, index) => {
+        if (child.isMesh) {
+            child.rotation.x += 0.005 * (index % 2 === 0 ? 1 : -1);
+            child.rotation.y += 0.008 * (index % 3 === 0 ? 1 : -1);
+            child.position.y += Math.sin(time + index) * 0.01;
+        }
+    });
+    
+    // Gentle camera movement
+    loginCamera.position.x = Math.sin(time * 0.05) * 3;
+    loginCamera.position.y = Math.cos(time * 0.03) * 2;
+    loginCamera.lookAt(loginScene.position);
+    
+    loginRenderer.render(loginScene, loginCamera);
+}
+
+function updateLoginThreeJSTheme(theme) {
+    if (!loginScene) return;
+    
+    const lights = loginScene.children.filter(child => child.isLight);
+    
+    if (theme === 'light') {
+        const ambientLight = lights.find(light => light.type === 'AmbientLight');
+        if (ambientLight) ambientLight.intensity = 0.6;
+        
+        const directionalLight = lights.find(light => light.type === 'DirectionalLight');
+        if (directionalLight) directionalLight.intensity = 0.4;
+    } else {
+        const ambientLight = lights.find(light => light.type === 'AmbientLight');
+        if (ambientLight) ambientLight.intensity = 0.3;
+        
+        const directionalLight = lights.find(light => light.type === 'DirectionalLight');
+        if (directionalLight) directionalLight.intensity = 0.8;
+    }
+}
+
+function onLoginWindowResize() {
+    if (!loginCamera || !loginRenderer) return;
+    
+    const container = document.getElementById('login-canvas').parentElement;
+    loginCamera.aspect = container.clientWidth / container.clientHeight;
+    loginCamera.updateProjectionMatrix();
+    loginRenderer.setSize(container.clientWidth, container.clientHeight);
 }
 
 // Three.js 3D Background
@@ -296,6 +678,7 @@ function initNavigation() {
     const sections = document.querySelectorAll('.section');
     const sidebarToggle = document.getElementById('sidebarToggle');
     const sidebar = document.getElementById('sidebar');
+    const logoutBtn = document.getElementById('logoutBtn');
     
     // Navigation item clicks
     navItems.forEach(item => {
@@ -313,6 +696,11 @@ function initNavigation() {
     sidebarToggle.addEventListener('click', () => {
         sidebar.classList.toggle('collapsed');
     });
+    
+    // Logout button
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', logout);
+    }
 }
 
 function showSection(sectionName) {

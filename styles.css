@@ -111,12 +111,51 @@
     border: 1px solid rgba(0, 128, 255, 0.15);
 }
 
-/* Theme Toggle */
-.theme-toggle-container {
+/* Top Controls */
+.top-controls {
     position: fixed;
     top: var(--spacing-lg);
     right: var(--spacing-lg);
     z-index: 1001;
+    display: flex;
+    gap: var(--spacing-sm);
+    align-items: center;
+}
+
+.logout-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: rgba(255, 107, 107, 0.1);
+    border: 1px solid rgba(255, 107, 107, 0.3);
+    border-radius: 25px;
+    color: #FF6B6B;
+    cursor: pointer;
+    transition: var(--transition-medium);
+    backdrop-filter: blur(10px);
+    box-shadow: var(--shadow-card);
+}
+
+.logout-btn:hover {
+    background: rgba(255, 107, 107, 0.2);
+    border-color: #FF6B6B;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+}
+
+.logout-btn i {
+    font-size: 1.1rem;
+}
+
+.logout-text {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* Theme Toggle */
+.theme-toggle-container {
+    position: relative;
 }
 
 .theme-toggle {
@@ -505,6 +544,12 @@ body {
     to { transform: rotate(360deg); }
 }
 
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+    20%, 40%, 60%, 80% { transform: translateX(10px); }
+}
+
 /* Login Divider */
 .login-divider {
     display: flex;
@@ -735,18 +780,23 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    overflow: hidden;
 }
 
 .logo {
     display: flex;
     align-items: center;
     gap: var(--spacing-sm);
+    min-width: 0;
+    flex: 1;
 }
 
 .logo i {
     font-size: 2rem;
     color: var(--primary-blue);
     animation: rotate 10s linear infinite;
+    transform-origin: center;
+    display: inline-block;
 }
 
 .logo-text {
@@ -1898,16 +1948,18 @@ select:focus {
         grid-template-columns: 1fr;
     }
     
-    .theme-toggle-container {
+    .top-controls {
         top: var(--spacing-md);
         right: var(--spacing-md);
     }
     
-    .theme-text {
+    .theme-text,
+    .logout-text {
         display: none;
     }
     
-    .theme-toggle {
+    .theme-toggle,
+    .logout-btn {
         padding: var(--spacing-sm);
         min-width: auto;
     }
