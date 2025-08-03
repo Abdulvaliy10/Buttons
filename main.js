@@ -10,9 +10,9 @@ const firefliesFragmentShader = document.getElementById(
 ).textContent;
 
 const debugObject = {
-  clearColor: "#1e2243",
-  portalColorStart: "#b91fac",
-  portalColorEnd: "#ffebf3"
+  clearColor: "#121212",
+  portalColorStart: "#00A86B",
+  portalColorEnd: "#00FF99"
 };
 
 // Canvas
