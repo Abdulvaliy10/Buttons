@@ -1,18 +1,29 @@
 // Global variables
 let scene, camera, renderer, packageBox, gears = [];
+let loginScene, loginCamera, loginRenderer;
 let revenueChart, expenseChart;
 let currentSection = 'dashboard';
+let isLoggedIn = false;
+
+// Login credentials
+const VALID_CREDENTIALS = {
+    username: 'saidmuhammad',
+    password: 'muhammad2005'
+};
 
 // Initialize application
 document.addEventListener('DOMContentLoaded', function() {
-    initLoadingScreen();
+    // Check if user is already logged in
+    const savedLogin = localStorage.getItem('isLoggedIn');
+    if (savedLogin === 'true') {
+        showMainApp();
+    } else {
+        showLoginScreen();
+    }
+    
+    initLoginSystem();
     initThemeToggle();
-    initThreeJS();
-    initNavigation();
-    initCharts();
-    initAnimations();
-    initData();
-    initResponsive();
+    initLoginThreeJS();
 });
 
 // Loading Screen

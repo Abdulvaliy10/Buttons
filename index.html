@@ -25,8 +25,130 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- Login Screen -->
+    <div id="login-screen" class="login-screen">
+        <div class="login-background">
+            <canvas id="login-canvas"></canvas>
+        </div>
+        
+        <div class="login-container">
+            <!-- Theme Toggle for Login -->
+            <div class="login-theme-toggle">
+                <button class="theme-toggle" id="loginThemeToggle" title="Toggle Theme">
+                    <i class="fas fa-moon" id="loginThemeIcon"></i>
+                </button>
+            </div>
+            
+            <div class="login-card">
+                <!-- Company Logo and Branding -->
+                <div class="login-header">
+                    <div class="login-logo">
+                        <i class="fas fa-industry"></i>
+                    </div>
+                    <h1 class="login-title">SaidMuhammad-paket</h1>
+                    <p class="login-subtitle">Plastic Packaging Factory CRM</p>
+                </div>
+                
+                <!-- Login Form -->
+                <form class="login-form" id="loginForm">
+                    <div class="form-group">
+                        <label for="username" class="form-label">
+                            <i class="fas fa-user"></i>
+                            Username
+                        </label>
+                        <input 
+                            type="text" 
+                            id="username" 
+                            name="username" 
+                            class="form-input"
+                            placeholder="Enter your username"
+                            required
+                        >
+                        <div class="input-focus-border"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password" class="form-label">
+                            <i class="fas fa-lock"></i>
+                            Password
+                        </label>
+                        <div class="password-wrapper">
+                            <input 
+                                type="password" 
+                                id="password" 
+                                name="password" 
+                                class="form-input"
+                                placeholder="Enter your password"
+                                required
+                            >
+                            <button type="button" class="password-toggle" id="passwordToggle">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <div class="input-focus-border"></div>
+                    </div>
+                    
+                    <div class="form-options">
+                        <label class="checkbox-wrapper">
+                            <input type="checkbox" id="rememberMe">
+                            <span class="checkmark"></span>
+                            Remember me
+                        </label>
+                        
+                        <button type="button" class="forgot-password" id="forgotPassword">
+                            Forgot Password?
+                        </button>
+                    </div>
+                    
+                    <button type="submit" class="login-btn" id="loginBtn">
+                        <span class="btn-text">Sign In</span>
+                        <div class="btn-loader" style="display: none;">
+                            <div class="spinner"></div>
+                        </div>
+                    </button>
+                    
+                    <div class="login-divider">
+                        <span>or</span>
+                    </div>
+                    
+                    <button type="button" class="demo-btn" id="demoBtn">
+                        <i class="fas fa-play"></i>
+                        Try Demo Version
+                    </button>
+                </form>
+                
+                <!-- Login Footer -->
+                <div class="login-footer">
+                    <p>&copy; 2024 SaidMuhammad-paket. All rights reserved.</p>
+                    <div class="login-links">
+                        <a href="#" class="reset-password" id="resetPassword">
+                            <i class="fas fa-key"></i>
+                            Reset Password
+                        </a>
+                        <a href="#" class="contact-support">
+                            <i class="fas fa-headset"></i>
+                            Contact Support
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Error Message -->
+        <div class="error-toast" id="errorToast">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span class="error-message"></span>
+        </div>
+        
+        <!-- Success Message -->
+        <div class="success-toast" id="successToast">
+            <i class="fas fa-check-circle"></i>
+            <span class="success-message"></span>
+        </div>
+    </div>
+
     <!-- Loading Screen -->
-    <div id="loading-screen">
+    <div id="loading-screen" class="loading-screen hidden">
         <div class="loading-content">
             <div class="factory-logo">
                 <i class="fas fa-industry"></i>
@@ -39,7 +161,7 @@
     </div>
 
     <!-- Main Container -->
-    <div id="app" class="app-container">
+    <div id="app" class="app-container hidden">
         <!-- Sidebar Navigation -->
         <nav class="sidebar" id="sidebar">
             <div class="sidebar-header">
